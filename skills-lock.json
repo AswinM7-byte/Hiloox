@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "skills": {
+    "image-to-video": {
+      "source": "eachlabs/skills",
+      "sourceType": "github",
+      "skillPath": "skills/image-to-video/SKILL.md",
+      "computedHash": "ae69de0643fe8dc9ca7dfa080a62c5c444e1a5056f9deccfb8453fcc3b6da659"
+    },
+    "lightweight-3d-effects": {
+      "source": "freshtechbro/claudedesignskills",
+      "sourceType": "github",
+      "skillPath": ".claude/skills/lightweight-3d-effects/SKILL.md",
+      "computedHash": "d5f716c3d9af8e7021950f5081391c30341401558627fb247702739cbc9fcda4"
+    },
+    "remotion-markup": {
+      "source": "remotion-dev/skills",
+      "sourceType": "github",
+      "skillPath": "skills/remotion-markup/SKILL.md",
+      "computedHash": "3575e57aec4ca6f5d6513351f778a41700d79213b3bdc00884c87789aca43e26"
+    }
+  }
+}

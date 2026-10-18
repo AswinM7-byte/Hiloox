@@ -1,0 +1,11 @@
+{
+  "fps": 24,
+  "frames": 240,
+  "width": 384,
+  "height": 512,
+  "columns": 6,
+  "framesPerAtlas": 24,
+  "atlasCount": 10,
+  "minArea": 77968,
+  "maxArea": 108747
+}

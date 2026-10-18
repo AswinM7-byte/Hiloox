@@ -1,0 +1,53 @@
+import assert from 'node:assert/strict';
+import { createOrbScene } from '../src/lib/orb-scene.mjs';
+const pending = new Map();
+const listeners = new Map();
+let nextFrame = 0, intersection, resized, preference, disconnected = 0;
+let reduced = false;
+globalThis.window = { devicePixelRatio: 2, matchMedia: query => query.includes('reduced') ? { matches: reduced, addEventListener: (_, cb) => { preference = cb; }, removeEventListener: () => { preference = null; } } : { matches: false } };
+// Keep a live media object so preference changes mimic matchMedia.
+const media = { matches: false, addEventListener: (_, cb) => { preference = cb; }, removeEventListener: () => { preference = null; } };
+window.matchMedia = query => query.includes('reduced') ? media : { matches: false };
+globalThis.document = { hidden: false, addEventListener: (name, cb) => listeners.set(name, cb), removeEventListener: name => listeners.delete(name) };
+globalThis.requestAnimationFrame = cb => { const id = ++nextFrame; pending.set(id, cb); return id; };
+globalThis.cancelAnimationFrame = id => pending.delete(id);
+globalThis.IntersectionObserver = class { constructor(cb) { intersection = cb; } observe() {} disconnect() { disconnected++; } };
+globalThis.ResizeObserver = class { constructor(cb) { resized = cb; } observe() {} disconnect() { disconnected++; } };
+const gradient = { addColorStop() {} };
+let draws = 0;
+const ctx = new Proxy({ createRadialGradient: () => gradient, clearRect: () => draws++ }, { get: (target, key) => target[key] ?? (() => {}) });
+const canvas = { getContext: () => ctx };
+let size = 500;
+const stage = { getBoundingClientRect: () => ({ width: size, height: size, left: 0, top: 0 }) };
+const lights = Array.from({ length: 3 }, () => ({ style: {} }));
+const runtime = createOrbScene(canvas, stage, lights);
+assert.equal(pending.size, 0, 'offscreen initialization does not animate');
+intersection([{ isIntersecting: true }]);
+assert.equal(pending.size, 1);
+function frame(time) { const [id, callback] = pending.entries().next().value; pending.delete(id); callback(time); }
+frame(100); frame(150);
+assert.ok(draws >= 2);
+runtime.setPaused(true); assert.equal(pending.size, 0);
+const before = Number.parseFloat(lights[0].style.left);
+assert.equal(runtime.nudge(0, 'ArrowRight'), true);
+assert.equal(Number.parseFloat(lights[0].style.left), before + 16);
+runtime.grab(0, { pointerId: 1, clientX: 0, clientY: 0 });
+runtime.move(0, { pointerId: 1, clientX: 9999, clientY: -9999 });
+assert.equal(Number.parseFloat(lights[0].style.left), 456);
+assert.equal(Number.parseFloat(lights[0].style.top), 0);
+runtime.release(0);
+runtime.setPaused(false); assert.equal(pending.size, 1);
+media.matches = true; preference(); assert.equal(pending.size, 0, 'reduced motion stops RAF');
+assert.equal(runtime.nudge(0, 'Home'), true);
+size = 280; resized();
+for (const light of lights) {
+  assert.ok(Number.parseFloat(light.style.left) >= 0 && Number.parseFloat(light.style.left) <= 236);
+  assert.ok(Number.parseFloat(light.style.top) >= 0 && Number.parseFloat(light.style.top) <= 236);
+}
+media.matches = false; preference(); assert.equal(pending.size, 1);
+document.hidden = true; listeners.get('visibilitychange')(); assert.equal(pending.size, 0);
+document.hidden = false; listeners.get('visibilitychange')(); assert.equal(pending.size, 1);
+intersection([{ isIntersecting: false }]); assert.equal(pending.size, 0);
+runtime.destroy(); assert.equal(pending.size, 0); assert.equal(listeners.size, 0); assert.equal(preference, null); assert.equal(disconnected, 2);
+assert.equal(createOrbScene({ getContext: () => null }, stage, lights), null);
+console.log('PASS: pause/resume, keyboard movement, drag constraints, reduced motion, resize, tab visibility, offscreen suspension, cleanup, and Canvas fallback.');
