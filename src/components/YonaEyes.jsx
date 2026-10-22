@@ -14,9 +14,10 @@ export default function YonaEyes() {
     </defs>
     {[{ key: "left", x: 176, y: 178, scale: .9 }, { key: "right", x: 247, y: 210, scale: 1.1 }].map(eye => <g key={eye.key} clipPath={`url(#${id}-${eye.key})`}>
       <rect x={eye.x - 35} y={eye.y - 35} width="70" height="70" fill={`url(#${id}-white)`} />
-      <g transform={`translate(${eye.x} ${eye.y})`}><g className="contact-pupil" style={{ transform: "translate(var(--gaze-x, 0px), var(--gaze-y, 0px))" }}><g transform={`rotate(25) scale(${eye.scale})`} clipPath={`url(#${id}-iris)`}>
+      <g transform={`translate(${eye.x} ${eye.y})`}><g className="contact-pupil" style={{ transform: `translate(var(--gaze-${eye.key}-x, 0px), var(--gaze-${eye.key}-y, 0px))` }}><g transform={`rotate(25) scale(${eye.scale})`} clipPath={`url(#${id}-iris)`}>
         <image href="/images/yona-eyes.png" x="-38" y="-41" width="135.4" height="73.8" />
       </g></g></g>
+      <ellipse className="contact-eyelid" cx={eye.x} cy={eye.y} rx="32" ry="26" fill="#f1d3df" style={{ transformOrigin: `${eye.x}px ${eye.y}px` }} />
     </g>)}
   </svg>;
 }

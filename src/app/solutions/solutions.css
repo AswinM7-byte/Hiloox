@@ -1,0 +1,81 @@
+/* Each sticky card shares one containing block, so the final card releases naturally. */
+.solution-stack {
+  --stack-top: 104px;
+  --stack-gap: 18px;
+  position: relative;
+  isolation: isolate;
+  overflow: visible;
+  padding-block: 64px;
+}
+.solution-stack-marker { height: 1px; margin-bottom: -1px; pointer-events: none; }
+.solution-stack-card {
+  position: relative;
+  z-index: calc(var(--card-index) + 1);
+  margin-bottom: 36px;
+  border: 1px solid var(--border);
+  border-radius: 28px;
+  background: var(--brand-paper);
+  box-shadow: 0 20px 50px -35px #38205c55;
+  scroll-margin-top: 180px;
+}
+.solution-stack-card:last-child { margin-bottom: 0; }
+.solution-stack-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border: 1px solid #b49bea;
+  border-radius: inherit;
+  opacity: calc(var(--solution-emphasis, 0) * .55);
+}
+.solution-stack-card:focus-within { z-index: 8; }
+.solution-stack .solution-story {
+  border: 0;
+  padding: clamp(24px, 3vw, 40px);
+  gap: clamp(24px, 3vw, 44px);
+  grid-template-columns: 1.1fr 1fr;
+  opacity: var(--solution-arrival-opacity, 1);
+  transform: translateY(calc(var(--solution-arrival-y, 0) * 1px));
+}
+.solution-stack .solution-copy { min-width: 0; }
+.solution-stack .solution-story h2 { font-size: clamp(1.8rem, 3vw, 2.8rem); }
+.solution-stack .solution-subheading { font-size: clamp(1.1rem, 1.6vw, 1.35rem); }
+.solution-stack .brand-copy { font-size: 1rem; line-height: 1.7; margin-block: 18px 24px; }
+.solution-stack .solution-diagram { padding: 20px; min-width: 0; box-shadow: none; }
+.solution-stack .solution-diagram > svg { width: 48px; height: 48px; padding: 10px; margin-bottom: 16px; }
+.solution-image-depth { margin-block: 16px; transform: translateY(calc(var(--solution-image-y, 0) * 1px)) scale(var(--solution-image-scale, 1)); }
+.solution-image-depth img { display: block; width: 100%; height: auto; aspect-ratio: 8 / 5; object-fit: contain; border-radius: 18px; }
+.solution-enter { animation: solution-arrive .6s var(--motion-out) var(--solution-delay, 0ms) backwards; }
+.solution-copy > h2 { --solution-delay: 40ms; }
+.solution-copy > h3 { --solution-delay: 80ms; }
+.solution-copy > .brand-copy { --solution-delay: 120ms; }
+.solution-copy > .brand-button { --solution-delay: 160ms; }
+.solution-diagram li:nth-child(2) { --solution-delay: 60ms; }
+.solution-diagram li:nth-child(3) { --solution-delay: 120ms; }
+.solution-enter:focus-within { animation: none; }
+@keyframes solution-arrive { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@media (min-width: 761px) and (prefers-reduced-motion: no-preference) {
+  .solution-stack[data-stack-fit="true"] { padding-bottom: 14vh; }
+  .solution-stack[data-stack-fit="true"] .solution-stack-card {
+    position: sticky;
+    top: calc(var(--stack-top) + var(--card-index) * var(--stack-gap));
+    min-height: var(--stack-card-height);
+    margin-bottom: clamp(100px, 20vh, 220px);
+  }
+  .solution-stack[data-stack-fit="true"] .solution-stack-card:last-child { margin-bottom: 0; }
+}
+@media (min-width: 761px) and (max-width: 1000px) {
+  .solution-stack { --stack-top: 100px; --stack-gap: 12px; }
+  .solution-stack .solution-story { gap: 22px; padding: 24px; }
+  .solution-stack .brand-copy { font-size: .95rem; line-height: 1.6; }
+  .solution-stack .solution-diagram { padding: 16px; }
+}
+@media (max-width: 760px) {
+  .solution-stack { padding-block: 40px; }
+  .solution-stack .solution-story { grid-template-columns: 1fr; }
+  .solution-image-depth { transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .solution-stack .solution-story, .solution-image-depth { transform: none!important; opacity: 1; }
+  .solution-enter { animation: none!important; }
+}

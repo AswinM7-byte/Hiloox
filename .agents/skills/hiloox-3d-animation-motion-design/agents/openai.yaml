@@ -1,0 +1,8 @@
+interface:
+  display_name: "Hiloox 3D Animation & Motion Design"
+  short_description: "Focused Hiloox animation and 3D motion engineering"
+  brand_color: "#5836C8"
+  default_prompt: "Use $hiloox-3d-animation-motion-design to inspect Hiloox and implement the requested focused animation, preserving its architecture and verifying responsiveness and reduced motion."
+
+policy:
+  allow_implicit_invocation: true

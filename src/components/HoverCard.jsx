@@ -14,7 +14,7 @@ const FILLS = {
  * Card whose brand-gradient panel sweeps up from the bottom edge on hover.
  *
  * The sweep is a real element rather than a pseudo-element so it can coexist
- * with other effects (SpotlightCard already uses ::before/::after), and it
+ * with other pseudo-element effects, and it
  * sits at -z-10 inside an isolated stacking context — above the card's own
  * background, below its content.
  *

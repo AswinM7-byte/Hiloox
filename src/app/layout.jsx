@@ -5,8 +5,8 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ScrollToTop from "@/components/ScrollToTop";
 import ScrollProgress from "@/components/ScrollProgress";
-import LoadingProvider from "@/components/LoadingProvider";
 import SmoothScroll from "@/components/SmoothScroll";
+import { pageMetadata, siteUrl } from "@/lib/seo";
 
 const geom = localFont({
   variable: "--font-geom",
@@ -16,28 +16,8 @@ const geom = localFont({
 });
 
 export const metadata = {
-  metadataBase: new URL("https://hiloox.com"),
-  title: "Hiloox — AI Voice & WhatsApp Agents | Hello, Powered by AI.",
-  description:
-    "Deploy intelligent AI voice and WhatsApp agents that answer customers instantly, automate conversations, qualify leads, and work 24/7. Hiloox — Hello, Powered by AI.",
-  keywords: [
-    "AI phone agent",
-    "AI WhatsApp agent",
-    "voice AI",
-    "conversational AI",
-    "customer support automation",
-    "Hiloox",
-  ],
-  openGraph: {
-    title: "Hiloox — AI Agents That Never Miss a Conversation",
-    description:
-      "Deploy intelligent AI voice and WhatsApp agents that answer customers instantly and work 24/7.",
-    type: "website",
-    images: ["/images/logo-full.png"],
-  },
-  twitter: {
-    card: "summary_large_image",
-  },
+  ...pageMetadata("/", "Hiloox — YONA AI Voice Agent", "Explore YONA, Hiloox’s AI voice agent for business conversations, customer enquiries, and connected workflows."),
+  metadataBase: new URL(siteUrl),
   icons: {
     icon: "/images/icon.png",
   },
@@ -70,14 +50,14 @@ export default function RootLayout({ children }) {
           }}
         />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({ "@context": "https://schema.org", "@type": "WebSite", "@id": "https://hiloox.com/#website", url: "https://hiloox.com", name: "Hiloox", publisher: { "@id": "https://hiloox.com/#organization" } }) }} />
-        <LoadingProvider><a href="#main-content" className="skip-link">Skip to content</a>
+        <a href="#main-content" className="skip-link">Skip to content</a>
         <SmoothScroll>
           <ScrollProgress />
           <Navbar />
           <main id="main-content" tabIndex={-1} className="flex-1">{children}</main>
           <Footer />
           <ScrollToTop />
-        </SmoothScroll></LoadingProvider>
+        </SmoothScroll>
       </body>
     </html>
   );

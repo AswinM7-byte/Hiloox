@@ -7,7 +7,7 @@ export function ActionLink({ href, children, secondary = false }) {
 }
 
 export function PageHero({ eyebrow, title, description, children, visual }) {
-  return <section className={`brand-hero ${visual ? "brand-hero-split" : ""}`}><div className="container-page brand-hero-layout"><CompanyReveal><p className="company-eyebrow">{eyebrow}</p><h1>{title}</h1><p className="brand-lead">{description}</p>{children && <div className="brand-actions">{children}</div>}</CompanyReveal>{visual}</div></section>;
+  return <section className={`brand-hero ${visual ? "brand-hero-split" : ""}`}><div className="container-page brand-hero-layout"><CompanyReveal>{eyebrow && <p className="company-eyebrow">{eyebrow}</p>}<h1>{title}</h1>{description && <p className="brand-lead">{description}</p>}{children && <div className="brand-actions">{children}</div>}</CompanyReveal>{visual}</div></section>;
 }
 
 export function ClosingCta({ eyebrow = "A conversation is a good place to start", title = "Your next chapter. Powered by intelligence." }) {

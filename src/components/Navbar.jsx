@@ -17,7 +17,16 @@ export default function Navbar() {
   const button = useRef(null);
   return <header className={`brand-nav ${scrolled ? "brand-nav-scrolled" : ""}`} onKeyDown={(event) => { if (event.key === "Escape" && open) { setOpen(false); button.current?.focus(); } }}>
     <div className="container-page brand-nav-inner">
-      <Link href="/" aria-label="Hiloox home" onClick={() => setOpen(false)}><Image src="/images/logo-full.png" alt="Hiloox" width={244} height={80} priority className="brand-logo" /></Link>
+      <Link href="/" aria-label="Hiloox home" className="brand-logo-link" onClick={() => setOpen(false)}>
+      <Image
+  src="/images/logo-full.png"
+  alt="Hiloox"
+  width={150}
+  height={60}
+  sizes="150px"
+  priority
+  className="brand-logo"
+/></Link>
       <nav aria-label="Main navigation" className="brand-desktop-nav">{nav.map((item) => <Link key={item.href} href={item.href} aria-current={pathname === item.href ? "page" : undefined}>{item.label}{pathname === item.href && <motion.span className="brand-nav-indicator" layoutId="route-indicator" transition={{ duration: reduced ? 0 : 0.25 }} />}</Link>)}</nav>
       <Link href="/products#demo" className="brand-nav-cta">Experience YONA</Link>
       <button className="brand-menu-toggle" ref={button} type="button" aria-label={open ? "Close menu" : "Open menu"} aria-expanded={open} aria-controls="mobile-navigation" onClick={() => setOpen((value) => !value)}>{open ? <X /> : <Menu />}</button>
